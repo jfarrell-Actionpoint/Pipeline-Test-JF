@@ -1,0 +1,40 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - main/*
+
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - main/*
+
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'Visual Studio Enterprise Subscription – MPN(452f3fa3-f8ec-475c-a21e-4125a9a7f192)'
+    subscriptionId: '452f3fa3-f8ec-475c-a21e-4125a9a7f192'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'Bicep-Test-RG'
+    location: 'North Europe'
+    templateLocation: 'Linked artifact'
+    csmFile: 'ResourceGroup+.bicep'
+    deploymentMode: 'Incremental'
